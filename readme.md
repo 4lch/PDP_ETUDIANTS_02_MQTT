@@ -106,7 +106,6 @@ mqtt_client.setServer(mqtt_server, mqtt_port);
 12. Un programme affiche les messages reçus sur le broker en direct. Vérifiez que votre montage envoie bien les mesures lues.
 13. Appelez-moi pour vérifier que tout fonctionne bien.
 14. `commit` le code si ce n'est pas déjà fait.
-15. Créer le tag "e1" avec `git tag e1`
-16. Tagguer le dernier commit à corriger avec "e1" avec la commande `git tag e1 HEAD`. Cette commande utilise "HEAD" comme référence au commit le plus récent.
+15. Tagguer le dernier commit à corriger avec "e1" avec la commande `git tag e1 HEAD`. Cette commande utilise "HEAD" comme référence au commit le plus récent.
 17. Publier vos `commit` avec vos tags avec `git push origin --tags` (ou `git push --set_upstream origin etape_1 --tags` pour associer la branche sur le repo distant si c'est votre premier push sur cette branche)
 ---
