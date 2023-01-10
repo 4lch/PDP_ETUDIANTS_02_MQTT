@@ -13,7 +13,7 @@
 Vous avez déjà eu l'opportunité d'utiliser MQTT lors du cours d'IOT. L'objectif de ce cours est de vous donner une nouvelle opportunité de bien comprendre le fonctionnement du prototole et son utilisation pour la distribution de messages légers en IOT. Le but de ce TP est de faire remonter les données de température et humidité lues lors du TP précédent avec MQTT.
 
 ## <ins>Préparation</ins>
-1. `Forkez` le projet du TP sur votre compte github avec le nom **"PDP_ETUDIANT_02_TD<`NUMERO_DE_TD`>\_GP<`NUMERO_DE_GROUPE`>"**. Par exemple, le groupe 7 du TD 4 devra créer le repo **"PDP_ETUDIANT_02_TD04_GP07"**
+1. `Forkez` le projet du TP sur votre compte github avec le nom **"PDP_ETUDIANTS_02_TD<`NUMERO_DE_TD`>\_GP<`NUMERO_DE_GROUPE`>"**. Par exemple, le groupe 7 du TD 4 devra créer le repo **"PDP_ETUDIANTS_02_TD04_GP07"**
 2. <ins>`ATTENTION : un projet mal nommé sera sanctionné de -5pts sur le suivi du TP. C'est littéralement la partie la plus facile pour vous et ça facilite énormément la correction.`</ins>
 3. Clonez **votre fork** sur votre machine avec `git clone <url>`
 4. Ouvrir le projet avec PlatformIO (sinon les options de compilation et téléversement peuvent ne pas apparaître)
