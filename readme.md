@@ -10,7 +10,7 @@
 ---
 
 ## <ins>Objectif</ins>
-Vous avez déjà eu l'opportunité d'utiliser MQTT lors du cours d'IOT. L'objectif de ce cours est de vous donner une nouvelle opportunité de bien comprendre le fonctionnement du prototole et son utilisation pour la distribution de messages légers en IOT. Le but de ce TP est de faire remonter les données de température et humidité lues lors du TP précédent avec MQTT.
+Vous avez déjà eu l'opportunité d'utiliser MQTT lors du cours d'IOT. L'objectif de ce cours est de vous donner une nouvelle opportunité de bien comprendre le fonctionnement du protocole et son utilisation pour la distribution de messages légers en IOT. Le but de ce TP est de faire remonter les données de température et humidité lues lors du TP précédent avec MQTT.
 
 ## <ins>Préparation</ins>
 1. `Forkez` le projet du TP sur votre compte github avec le nom **"PDP_ETUDIANTS_02_TD<`NUMERO_DE_TD`>\_GP<`NUMERO_DE_GROUPE`>"**. Par exemple, le groupe 7 du TD 4 devra créer le repo **"PDP_ETUDIANTS_02_TD04_GP07"**
@@ -111,14 +111,14 @@ emyPxgcYxn/eR44/KJ4EBs+lVDR3veyJm+kXQ99b21/+jh5Xos1AnX5iItreGCc=
 -----END CERTIFICATE-----
 )EOF";
 ``` 
-  Vous venez d'ajouter le certificat CA du broker, utilisé pour la connexion sécurisée.
+  Vous venez d'ajouter le certificat CA du broker, utilisé pour la connexion sécurisée. Il s'agit du certificat qui permet de vérifier l'identité du broker.
 
-6. Au-dessus du `setup`, créer et instancier le client WiFi et le client MQTT.
+7. Au-dessus du `setup`, créer et instancier le client WiFi et le client MQTT.
 ```C
 WiFiClientSecure client;
 PubSubClient mqtt_client(client); 
 ```
-7. Toujours au-dessus du setup, déclarer la fonction qui servira à connecter la carte au réseau WiFi. L'appeler à l'endroit indiqué dans le `setup`.
+8. Toujours au-dessus du setup, déclarer la fonction qui servira à connecter la carte au réseau WiFi. L'appeler à l'endroit indiqué dans le `setup`.
 ```C
 void connect_wifi() {
   Serial.print("Connecting to WiFi");
@@ -132,19 +132,19 @@ void connect_wifi() {
   Serial.println("\nConnected.");
 }
 ```
-8. Configurer le serveur MQTT à l'endroit indiqué avec
+9. Configurer le serveur MQTT à l'endroit indiqué avec
 ```C
 mqtt_client.setServer(mqtt_server, mqtt_port);
 client.setCACert(ca_cert);
 ```
-9. A ce moment, le code est prêt à envoyer les valeurs lues au broker avec MQTT.
-10. Au bon endroit dans le code, connectez le client au broker avec la fonction `mqtt_client.connect()`, connez-lui les bons arguments.
-11. <ins>`Si et seulement si`</ins> la fonction `connect` a bien fonctionné (elle retourne un booléen...), publiez la température et l'humidité relative avec MQTT.
+10. A ce moment, le code est prêt à envoyer les valeurs lues au broker avec MQTT.
+11. Au bon endroit dans le code, connectez le client au broker avec la fonction `mqtt_client.connect()`, connez-lui les bons arguments.
+12. <ins>`Si et seulement si`</ins> la fonction `connect` a bien fonctionné (elle retourne un booléen...), publiez la température et l'humidité relative avec MQTT.
     - Le topic pour la température est `"TDXX_GPXX/temp"`, même formalisme que pour `client_id`.
     - Le topic pour l'humidité est `"TDXX_GPXX/relhum"`, même formalisme que pour `client_id`.
-12. Un programme affiche les messages reçus sur le broker en direct. Vérifiez que votre montage envoie bien les mesures lues.
-13. Appelez-moi pour vérifier que tout fonctionne bien.
-14. `commit` le code si ce n'est pas déjà fait.
-15. Tagguer le dernier commit à corriger avec "e1" avec la commande `git tag e1 HEAD`. Cette commande utilise "HEAD" comme référence au commit le plus récent.
+13. Un programme affiche les messages reçus sur le broker en direct. Vérifiez que votre montage envoie bien les mesures lues.
+14. Appelez-moi pour vérifier que tout fonctionne bien.
+15. `commit` le code si ce n'est pas déjà fait.
+16. Tagguer le dernier commit à corriger avec "e1" avec la commande `git tag e1 HEAD`. Cette commande utilise "HEAD" comme référence au commit le plus récent.
 17. Publier vos `commit` avec vos tags avec `git push origin --tags` (ou `git push --set_upstream origin etape_1 --tags` pour associer la branche sur le repo distant si c'est votre premier push sur cette branche)
 ---
