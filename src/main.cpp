@@ -83,7 +83,6 @@ void setup()
   connect_wifi();
   mqtt_client.setServer(mqtt_server, mqtt_port);
   client.setCACert(ca_cert);
-  mqtt_client.connect(client_id, mqtt_user, mqtt_pass);
   // Start listening to the DHT11
   dht.begin();
 
@@ -118,10 +117,11 @@ void setup()
     Serial.println(F("%"));
     relative_humidity_measure = event.relative_humidity;
   }
-
-  mqtt_client.publish(TEMPERATURE, String(event.temperature).c_str());
-  mqtt_client.publish(HUMIDITE, String(event.relative_humidity).c_str());
-
+  if (mqtt_client.connect(client_id, mqtt_user, mqtt_pass))
+  {
+    mqtt_client.publish(TEMPERATURE, String(temp_measure).c_str());
+    mqtt_client.publish(HUMIDITE, String(relative_humidity_measure).c_str());
+  }
   Serial.println("Going to sleep for 5 seconds...");
   delay(100);
   ESP.deepSleep(5e6);
