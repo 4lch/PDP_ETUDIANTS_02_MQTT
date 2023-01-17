@@ -5,6 +5,9 @@
 #include "WiFiClientSecure.h"
 #include <PubSubClient.h>
 
+#define TEMPERATURE "TD08_GP03/temp"
+#define HUMIDITE "TD08_GP03/relhum"
+
 const char *wifi_ssid = "iPhone de Jules"; // WiFi name
 const char *wifi_password = "Ataturk123";  // WiFi password
 const char *mqtt_server = "27cc61dbaffc4da08cd0081cabd8cf01.s2.eu.hivemq.cloud";
@@ -49,12 +52,11 @@ emyPxgcYxn/eR44/KJ4EBs+lVDR3veyJm+kXQ99b21/+jh5Xos1AnX5iItreGCc=
 
 // Define the pins that we will use
 #define SENSOR 33
-#define LED 26
 #define DHTTYPE DHT11
 
-DHT_Unified dht(SENSOR, DHTTYPE);
 WiFiClientSecure client;
 PubSubClient mqtt_client(client);
+DHT_Unified dht(SENSOR, DHTTYPE);
 
 void connect_wifi()
 {
@@ -68,8 +70,6 @@ void connect_wifi()
     delay(200);
   }
   Serial.println("\nConnected.");
-  mqtt_client.setServer(mqtt_server, mqtt_port);
-  client.setCACert(ca_cert);
 }
 
 void setup()
@@ -80,10 +80,10 @@ void setup()
 
   // Connect to WiFi
   // ...
-
-  // Configure MQTT server
-  // ...
-
+  connect_wifi();
+  mqtt_client.setServer(mqtt_server, mqtt_port);
+  client.setCACert(ca_cert);
+  mqtt_client.connect(client_id, mqtt_user, mqtt_pass);
   // Start listening to the DHT11
   dht.begin();
 
@@ -119,8 +119,8 @@ void setup()
     relative_humidity_measure = event.relative_humidity;
   }
 
-  // Send data to the broker with MQTT
-  // ...
+  mqtt_client.publish(TEMPERATURE, String(event.temperature).c_str());
+  mqtt_client.publish(HUMIDITE, String(event.relative_humidity).c_str());
 
   Serial.println("Going to sleep for 5 seconds...");
   delay(100);
