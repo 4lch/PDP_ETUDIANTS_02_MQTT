@@ -5,7 +5,7 @@
 #include "WiFiClientSecure.h"
 #include <PubSubClient.h>
 
-const char* wifi_ssid = <Iphone de Antonin>;
+const char* wifi_ssid = <Iphonr de Antonin>;
 const char* wifi_password = <12345678>;
 const char* mqtt_server = "27cc61dbaffc4da08cd0081cabd8cf01.s2.eu.hivemq.cloud";
 int mqtt_port = 8883;
@@ -47,10 +47,18 @@ emyPxgcYxn/eR44/KJ4EBs+lVDR3veyJm+kXQ99b21/+jh5Xos1AnX5iItreGCc=
 -----END CERTIFICATE-----
 )EOF";
 
-// Define the pins that we will use
-#define SENSOR 33
-#define LED 26
-#define DHTTYPE DHT11
+#define DHTPIN 33
+#define DHTTYPE    DHT11
+
+#define uS_TO_S_FACTOR 1000000
+#define TIME_TO_SLEEP  5
+
+DHT_Unified dht(DHTPIN, DHTTYPE);
+
+
+// Initialisation du client
+WiFiClientSecure client;
+PubSubClient mqtt_client(client);
 
 DHT_Unified dht(SENSOR, DHTTYPE);
 
@@ -70,9 +78,8 @@ void connect_wifi() {
 }
 
 void setup() {
-  // Begin serial communication
   Serial.begin(9600);
-  delay(100);
+  delay(1000);
 
   // Connect to WiFi
   // ...
@@ -82,42 +89,64 @@ void setup() {
   client.setCACert(ca_cert);
 
   // Start listening to the DHT11
+
+  
+  // deep sleep pour 5secondes
+  esp_sleep_enable_timer_wakeup(TIME_TO_SLEEP * uS_TO_S_FACTOR);
+
+  // Initialize device.
   dht.begin();
+  // Print temperature sensor details.
+  sensor_t sensor;
+  dht.temperature().getSensor(&sensor);
+  Serial.println(F("------------------------------------"));
+  Serial.println(F("Temperature Sensor"));
+  Serial.print  (F("Sensor Type: ")); Serial.println(sensor.name);
+  Serial.print  (F("Driver Ver:  ")); Serial.println(sensor.version);
+  Serial.print  (F("Unique ID:   ")); Serial.println(sensor.sensor_id);
+  Serial.print  (F("Max Value:   ")); Serial.print(sensor.max_value); Serial.println(F("°C"));
+  Serial.print  (F("Min Value:   ")); Serial.print(sensor.min_value); Serial.println(F("°C"));
+  Serial.print  (F("Resolution:  ")); Serial.print(sensor.resolution); Serial.println(F("°C"));
+  Serial.println(F("------------------------------------"));
+  // Print humidity sensor details.
+  dht.humidity().getSensor(&sensor);
+  Serial.println(F("Humidity Sensor"));
+  Serial.print  (F("Sensor Type: ")); Serial.println(sensor.name);
+  Serial.print  (F("Driver Ver:  ")); Serial.println(sensor.version);
+  Serial.print  (F("Unique ID:   ")); Serial.println(sensor.sensor_id);
+  Serial.print  (F("Max Value:   ")); Serial.print(sensor.max_value); Serial.println(F("%"));
+  Serial.print  (F("Min Value:   ")); Serial.print(sensor.min_value); Serial.println(F("%"));
+  Serial.print  (F("Resolution:  ")); Serial.print(sensor.resolution); Serial.println(F("%"));
+  Serial.println(F("------------------------------------"));
 
+  // Get temperature event and print its value.
   sensors_event_t event;
-
-  // Get temperature event and print its value
-  float temp_measure = -999.0;
   dht.temperature().getEvent(&event);
   if (isnan(event.temperature)) {
     Serial.println(F("Error reading temperature!"));
-  } else {
+  }
+  else {
     Serial.print(F("Temperature: "));
     Serial.print(event.temperature);
     Serial.println(F("°C"));
-    temp_measure = event.temperature;
   }
 
-  // Get humidity event and print its valu
+  // Get humidity event and print its value.
   float relative_humidity_measure = -999.0;
   dht.humidity().getEvent(&event);
   if (isnan(event.relative_humidity)) {
     Serial.println(F("Error reading humidity!"));
-  } else {
+  }
+  else {
     Serial.print(F("Humidity: "));
     Serial.print(event.relative_humidity);
     Serial.println(F("%"));
-    relative_humidity_measure = event.relative_humidity;
   }
 
-  // Send data to the broker with MQTT
-  // ...
-
-  Serial.println("Going to sleep for 5 seconds...");
-  delay(100);
-  ESP.deepSleep(5e6);
+  Serial.println("Going to sleep now");
+  Serial.flush(); 
+  esp_deep_sleep_start();
 }
 
 void loop() {
-  // Not needed anymore, the function is kept so Platformio does not complain.
 }
