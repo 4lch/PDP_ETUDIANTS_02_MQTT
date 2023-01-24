@@ -5,7 +5,7 @@
 #include "WiFiClientSecure.h"
 #include <PubSubClient.h>
 
-const char* wifi_ssid = <Iphonr de Antonin>;
+const char* wifi_ssid = <Iphone de Antonin>;
 const char* wifi_password = <12345678>;
 const char* mqtt_server = "27cc61dbaffc4da08cd0081cabd8cf01.s2.eu.hivemq.cloud";
 int mqtt_port = 8883;
