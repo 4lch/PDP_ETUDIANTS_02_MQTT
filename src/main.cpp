@@ -5,13 +5,19 @@
 #include "WiFiClientSecure.h"
 #include <PubSubClient.h>
 
-const char* wifi_ssid = Iphone de Brieuc;
-const char* wifi_password = px9hr3ftqk4s6;
+#define SENSOR 33
+#define LED 26
+#define DHTTYPE DHT11
+
+
+
+const char* wifi_ssid = "iPhone de Brieuc";
+const char* wifi_password = "px9hr3ftqk4s6";
 const char* mqtt_server = "27cc61dbaffc4da08cd0081cabd8cf01.s2.eu.hivemq.cloud";
 int mqtt_port = 8883;
 const char* mqtt_user = "ocres4ever";
 const char* mqtt_pass = "ocresse123";
-const char* client_id = TD08_GP13;
+const char* client_id = "TD08_GP13";
 
 static const char ca_cert[] PROGMEM = R"EOF(
 -----BEGIN CERTIFICATE-----
@@ -53,17 +59,11 @@ emyPxgcYxn/eR44/KJ4EBs+lVDR3veyJm+kXQ99b21/+jh5Xos1AnX5iItreGCc=
 #define uS_TO_S_FACTOR 1000000
 #define TIME_TO_SLEEP  5
 
-DHT_Unified dht(DHTPIN, DHTTYPE);
-
-
 // Initialisation du client
 WiFiClientSecure client;
 PubSubClient mqtt_client(client);
 
 DHT_Unified dht(SENSOR, DHTTYPE);
-
-WiFiClientSecure client;
-PubSubClient mqtt_client(client); 
 
 void connect_wifi() {
   Serial.print("Connecting to WiFi");
@@ -148,5 +148,5 @@ void setup() {
   esp_deep_sleep_start();
 }
 
-void loop() {ououououououo
+void loop() {
 }
