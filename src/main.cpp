@@ -1,3 +1,8 @@
+#define DHTPIN 33
+#define DHTTYPE    DHT11
+#define uS_TO_S_FACTOR 1000000
+#define TIME_TO_SLEEP  5
+
 #include <Arduino.h>
 #include <Adafruit_Sensor.h>
 #include <DHT.h>
@@ -5,14 +10,9 @@
 #include "WiFiClientSecure.h"
 #include <PubSubClient.h>
 
-#define SENSOR 33
-#define LED 26
-#define DHTTYPE DHT11
 
-
-
-const char* wifi_ssid = "iPhone de Brieuc";
-const char* wifi_password = "px9hr3ftqk4s6";
+const char* wifi_ssid = "iPhone Lopez";
+const char* wifi_password = "flaquito";
 const char* mqtt_server = "27cc61dbaffc4da08cd0081cabd8cf01.s2.eu.hivemq.cloud";
 int mqtt_port = 8883;
 const char* mqtt_user = "ocres4ever";
@@ -53,17 +53,12 @@ emyPxgcYxn/eR44/KJ4EBs+lVDR3veyJm+kXQ99b21/+jh5Xos1AnX5iItreGCc=
 -----END CERTIFICATE-----
 )EOF";
 
-#define DHTPIN 33
-#define DHTTYPE    DHT11
 
-#define uS_TO_S_FACTOR 1000000
-#define TIME_TO_SLEEP  5
+DHT_Unified dht(DHTPIN, DHTTYPE);
 
 // Initialisation du client
 WiFiClientSecure client;
 PubSubClient mqtt_client(client);
-
-DHT_Unified dht(SENSOR, DHTTYPE);
 
 void connect_wifi() {
   Serial.print("Connecting to WiFi");
@@ -77,12 +72,15 @@ void connect_wifi() {
   Serial.println("\nConnected.");
 }
 
+float temp = 0;
+float humid = 0;
+
 void setup() {
   Serial.begin(9600);
   delay(1000);
 
   // Connect to WiFi
-  // ...
+  connect_wifi();
   
   // Configure MQTT server
   mqtt_client.setServer(mqtt_server, mqtt_port);
@@ -127,22 +125,28 @@ void setup() {
   }
   else {
     Serial.print(F("Temperature: "));
+    temp = event.temperature;
     Serial.print(event.temperature);
     Serial.println(F("°C"));
   }
-
   // Get humidity event and print its value.
-  float relative_humidity_measure = -999.0;
   dht.humidity().getEvent(&event);
   if (isnan(event.relative_humidity)) {
     Serial.println(F("Error reading humidity!"));
   }
   else {
     Serial.print(F("Humidity: "));
+    humid = event.relative_humidity;
     Serial.print(event.relative_humidity);
     Serial.println(F("%"));
   }
 
+  mqtt_client.setServer(mqtt_server, mqtt_port);
+  client.setCACert(ca_cert);
+  if(mqtt_client.connect(client_id, mqtt_user, mqtt_pass)){
+    mqtt_client.publish("TD08_GP13/temp", String(temp).c_str());
+    mqtt_client.publish("TD08_GP013/relhum", String(humid).c_str());
+  }
   Serial.println("Going to sleep now");
   Serial.flush(); 
   esp_deep_sleep_start();
