@@ -146,5 +146,5 @@ client.setCACert(ca_cert);
 14. Appelez-moi pour vérifier que tout fonctionne bien.
 15. `commit` le code si ce n'est pas déjà fait.
 16. Tagguer le dernier commit à corriger avec "e1" avec la commande `git tag e1 HEAD`. Cette commande utilise "HEAD" comme référence au commit le plus récent.
-17. Publier vos `commit` avec vos tags avec `git push origin --tags` (ou `git push --set_upstream origin etape_1 --tags` pour associer la branche sur le repo distant si c'est votre premier push sur cette branche)
+17. Publier vos `commit` avec vos tags avec `git push origin --tags` (ou `git push --set-upstream origin etape_1 --tags` pour associer la branche sur le repo distant si c'est votre premier push sur cette branche)
 ---
